@@ -1,0 +1,13 @@
+@import 'src/theme.scss';
+
+:host {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  background-color: mat-color($app-primary, 500);
+}
+
+mat-card {
+  min-width: 200px;
+  max-width: 400px;
+}
