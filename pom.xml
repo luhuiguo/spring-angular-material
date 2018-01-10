@@ -3,7 +3,7 @@
   xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.luhuiguo</groupId>
+  <groupId>com.luhuiguo.archetypes</groupId>
   <artifactId>spring-angular-material</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
@@ -52,6 +52,44 @@
     <!-- Spring Profile-->
     <spring.profiles.active>dev</spring.profiles.active>
   </properties>
+  <repositories>
+    <repository>
+      <id>luhuiguo-release</id>
+      <url>http://repo.luhuiguo.com/artifactory/libs-release</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>luhuiguo-snapshot</id>
+      <url>http://repo.luhuiguo.com/artifactory/libs-snapshot</url>
+      <snapshots/>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>luhuiguo-release</id>
+      <url>http://repo.luhuiguo.com/artifactory/libs-release</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>luhuiguo-snapshot</id>
+      <url>http://repo.luhuiguo.com/artifactory/libs-snapshot</url>
+      <snapshots/>
+    </pluginRepository>
+  </pluginRepositories>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>luhuiguo</id>
+      <url>http://repo.luhuiguo.com/artifactory/libs-snapshot-local</url>
+    </snapshotRepository>
+    <repository>
+      <id>luhuiguo</id>
+      <url>http://repo.luhuiguo.com/artifactory/libs-release-local</url>
+    </repository>
+  </distributionManagement>
   <dependencies>
     <!-- Apache Commons -->
     <dependency>
