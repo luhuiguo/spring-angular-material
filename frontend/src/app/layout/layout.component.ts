@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '../../user/user';
-import { AuthService } from '../../auth/auth.service';
+import { User } from '../core/user/user';
+import { AuthService } from '../core/auth/auth.service';
 
 const SMALL_WIDTH_BREAKPOINT = 720;
 
 @Component({
-  selector: 'app-default-layout',
-  templateUrl: './default-layout.component.html',
-  styleUrls: ['./default-layout.component.scss']
+  selector: 'app-layout',
+  templateUrl: './layout.component.html',
+  styleUrls: ['./layout.component.scss']
 })
-export class DefaultLayoutComponent implements OnInit {
+export class LayoutComponent implements OnInit {
 
   private mediaMatcher: MediaQueryList = matchMedia(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`);
 

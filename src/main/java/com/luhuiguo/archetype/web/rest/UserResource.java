@@ -2,6 +2,8 @@ package com.luhuiguo.archetype.web.rest;
 
 import com.luhuiguo.archetype.config.Constants;
 import com.luhuiguo.archetype.domain.User;
+import com.luhuiguo.archetype.domain.criteria.UserCriteria;
+import com.luhuiguo.archetype.domain.specification.UserSpecification;
 import com.luhuiguo.archetype.mapper.UserMapper;
 import com.luhuiguo.archetype.model.UserModel;
 import com.luhuiguo.archetype.repository.UserRepository;
@@ -23,12 +25,14 @@ import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -122,18 +126,24 @@ public class UserResource {
       HeaderUtils.createAlert("userManagement.updated", userModel.getUsername()));
   }
 
-  /**
-   * GET /users : get all users.
-   *
-   * @param pageable the pagination information
-   * @return the ResponseEntity with status 200 (OK) and with body all users
-   */
-  @GetMapping("/users")
-  public ResponseEntity<List<UserModel>> getAllUsers(Pageable pageable) {
-    final Page<UserModel> page = userService.getAllManagedUsers(pageable);
-    HttpHeaders headers = PaginationUtils.generatePaginationHttpHeaders(page, "/api/users");
-    return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+  @GetMapping(value = "/users")
+  public Page<UserModel> query(@ModelAttribute UserCriteria criteria,
+    @PageableDefault Pageable pageable) {
+    return userService.query(criteria, pageable);
   }
+
+//  /**
+//   * GET /users : get all users.
+//   *
+//   * @param pageable the pagination information
+//   * @return the ResponseEntity with status 200 (OK) and with body all users
+//   */
+//  @GetMapping("/users")
+//  public ResponseEntity<List<UserModel>> getAllUsers(Pageable pageable) {
+//    final Page<UserModel> page = userService.getAllManagedUsers(pageable);
+//    HttpHeaders headers = PaginationUtils.generatePaginationHttpHeaders(page, "/api/users");
+//    return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//  }
 
   /**
    * @return a string list of the all of the roles
@@ -145,32 +155,32 @@ public class UserResource {
   }
 
   /**
-   * GET /users/:username : get the "username" user.
+   * GET /users/:id : get the "id" user.
    *
-   * @param username the username of the user to find
-   * @return the ResponseEntity with status 200 (OK) and with body the "username" user, or with
+   * @param id the id of the user to find
+   * @return the ResponseEntity with status 200 (OK) and with body the "id" user, or with
    * status 404 (Not Found)
    */
-  @GetMapping("/users/{username:" + Constants.USERNAME_REGEX + "}")
-  public ResponseEntity<UserModel> getUser(@PathVariable String username) {
-    log.debug("REST request to get User : {}", username);
+  @GetMapping("/users/{id}")
+  public ResponseEntity<UserModel> getUser(@PathVariable Long id) {
+    log.debug("REST request to get User : {}", id);
     return ResponseUtils.wrapOrNotFound(
-      userService.getUserWithAuthoritiesByUsername(username)
+      userService.getUserWithAuthorities(id)
         .map(userMapper::entityToModel));
   }
 
   /**
-   * DELETE /users/:username : delete the "username" User.
+   * DELETE /users/:id : delete the "username" User.
    *
-   * @param username the username of the user to delete
+   * @param id the id of the user to delete
    * @return the ResponseEntity with status 200 (OK)
    */
-  @DeleteMapping("/users/{username:" + Constants.USERNAME_REGEX + "}")
+  @DeleteMapping("/users/{id}")
   @Secured(AuthorityConstants.ADMIN)
-  public ResponseEntity<Void> deleteUser(@PathVariable String username) {
-    log.debug("REST request to delete User: {}", username);
-    userService.deleteUser(username);
-    return ResponseEntity.ok().headers(HeaderUtils.createAlert("userManagement.deleted", username))
+  public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    log.debug("REST request to delete User: {}", id);
+    userService.deleteUser(id);
+    return ResponseEntity.ok().headers(HeaderUtils.createAlert("userManagement.deleted", id.toString()))
       .build();
   }
 }

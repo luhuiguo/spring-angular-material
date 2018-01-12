@@ -5,14 +5,12 @@ import { SelectivePreloadingStrategy } from './selective-preloading-strategy';
 
 import { AuthGuard } from './core/auth/auth.guard';
 
-import { DefaultLayoutComponent } from './core/layout/default-layout/default-layout.component';
-import { AccessDeniedComponent } from './core/page/access-denied/access-denied.component';
-import { PageNotFoundComponent } from './core/page/page-not-found/page-not-found.component';
+import { LayoutComponent } from './layout/layout.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: DefaultLayoutComponent,
+    component: LayoutComponent,
     canActivateChild: [AuthGuard],
     children: [
       {
@@ -33,15 +31,6 @@ export const routes: Routes = [
         }
       }
     ]
-
-  },
-  {
-    path: 'access-denied',
-    component: AccessDeniedComponent
-  },
-  {
-    path: '**',
-    component: PageNotFoundComponent
   }
 ];
 

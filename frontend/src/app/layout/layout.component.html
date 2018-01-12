@@ -3,7 +3,7 @@
     <mat-icon>menu</mat-icon>
   </button>
   <a mat-button routerLink="/">
-    <mat-icon>home</mat-icon> 资讯管理
+    spring-angular-material
   </a>
   <span fxFlex></span>
   <span>{{principal?.name}}</span>
@@ -14,7 +14,7 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav class="sidenav" [opened]="!isScreenSmall()" [mode]="isScreenSmall() ? 'over' : 'side'" [fixedInViewport]="isScreenSmall()"
     fixedTopGap="92">
-    <app-nav-menu></app-nav-menu>
+    <app-sidebar></app-sidebar>
   </mat-sidenav>
   <mat-sidenav-content>
     <router-outlet></router-outlet>

@@ -9,11 +9,13 @@ import { AppComponent } from './app.component';
 
 /* Feature Modules */
 import { CoreModule } from './core/core.module';
+import { SharedModule } from './shared/shared.module';
+import { LayoutModule } from './layout/layout.module';
+import { PageModule } from './page/page.module';
 import { LoginModule } from './login/login.module';
 
 /* Routing Module */
 import { AppRoutingModule } from './app-routing.module';
-
 
 
 @NgModule({
@@ -24,8 +26,11 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     BrowserAnimationsModule,
     CoreModule,
+    SharedModule,
+    LayoutModule,
     LoginModule,
-    AppRoutingModule
+    AppRoutingModule,
+    PageModule
   ],
   providers: [],
   bootstrap: [AppComponent]

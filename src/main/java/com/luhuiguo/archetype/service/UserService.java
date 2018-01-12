@@ -3,6 +3,8 @@ package com.luhuiguo.archetype.service;
 
 import com.luhuiguo.archetype.config.Constants;
 import com.luhuiguo.archetype.domain.User;
+import com.luhuiguo.archetype.domain.criteria.UserCriteria;
+import com.luhuiguo.archetype.domain.specification.UserSpecification;
 import com.luhuiguo.archetype.mapper.UserMapper;
 import com.luhuiguo.archetype.model.UserModel;
 import com.luhuiguo.archetype.repository.UserRepository;
@@ -112,13 +114,14 @@ public class UserService {
    * Update basic information (first name, last name, email, language) for the current user.
    *
    * @param nickname nickname of user
-   * @param name  name of user
+   * @param name name of user
    * @param email email id of user
    * @param phone phone number of user
    * @param langKey language key
    * @param avatar avatar URL of user
    */
-  public void updateUser(String nickname, String name, String email, String phone, String langKey, String avatar) {
+  public void updateUser(String nickname, String name, String email, String phone, String langKey,
+    String avatar) {
     SecurityUtils.getCurrentUsername()
       .flatMap(userRepository::findOneByUsername)
       .ifPresent(user -> {
@@ -157,6 +160,13 @@ public class UserService {
     });
   }
 
+  public void deleteUser(Long id) {
+    userRepository.findOneById(id).ifPresent(user -> {
+      userRepository.delete(user);
+      log.debug("Deleted User: {}", user);
+    });
+  }
+
   public void changePassword(String password) {
     SecurityUtils.getCurrentUsername()
       .flatMap(userRepository::findOneByUsername)
@@ -168,8 +178,15 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
+  public Page<UserModel> query(UserCriteria criteria, Pageable pageable) {
+    return userRepository.findAll(new UserSpecification(criteria), pageable)
+      .map(userMapper::entityToModel);
+  }
+
+  @Transactional(readOnly = true)
   public Page<UserModel> getAllManagedUsers(Pageable pageable) {
-    return userRepository.findAllByUsernameNot(pageable, Constants.ANONYMOUS_USER).map(userMapper::entityToModel);
+    return userRepository.findAllByUsernameNot(pageable, Constants.ANONYMOUS_USER)
+      .map(userMapper::entityToModel);
   }
 
   @Transactional(readOnly = true)
@@ -184,7 +201,8 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public Optional<User> getUserWithAuthorities() {
-    return SecurityUtils.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
+    return SecurityUtils.getCurrentUsername()
+      .flatMap(userRepository::findOneWithAuthoritiesByUsername);
   }
 
 

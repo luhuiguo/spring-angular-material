@@ -1,0 +1,21 @@
+<mat-nav-list>
+  <mat-list-item routerLinkActive="active">
+    <mat-icon matListIcon>dashboard</mat-icon>
+    <a matLine routerLink="/dashboard">仪表盘</a>
+  </mat-list-item>
+  <h3 mat-subheader>个人设置</h3>
+  <mat-list-item routerLinkActive="active">
+    <mat-icon matListIcon>lock</mat-icon>
+    <a matLine routerLink="/password">修改密码</a>
+  </mat-list-item>
+  <mat-list-item routerLinkActive="active">
+    <mat-icon matListIcon>person</mat-icon>
+    <a matLine routerLink="/profile">用户信息</a>
+  </mat-list-item>
+
+  <h3 mat-subheader>系统管理</h3>
+  <mat-list-item routerLinkActive="active">
+    <mat-icon matListIcon>people</mat-icon>
+    <a matLine routerLink="/users">用户管理</a>
+  </mat-list-item>
+</mat-nav-list>

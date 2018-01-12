@@ -31,7 +31,7 @@
   </issueManagement>
   <scm>
     <connection>scm:git:https://github.com/luhuiguo/spring-angular-material.git</connection>
-    <developerConnection>scm:git:git@github.com:luhuiguo/spring-angular-material.git    </developerConnection>
+    <developerConnection>scm:git:git@github.com:luhuiguo/spring-angular-material.git</developerConnection>
     <url>https://github.com/luhuiguo/spring-angular-material</url>
   </scm>
   <properties>

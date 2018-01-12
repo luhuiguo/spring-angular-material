@@ -8,9 +8,6 @@ import { AppMaterialModule } from '../app-material/app-material.module';
 
 import { Ng2Webstorage } from 'ngx-webstorage';
 
-import { PageNotFoundComponent } from './page/page-not-found/page-not-found.component';
-import { AccessDeniedComponent } from './page/access-denied/access-denied.component';
-import { DefaultLayoutComponent } from './layout/default-layout/default-layout.component';
 import { NavMenuComponent } from './layout/nav-menu/nav-menu.component';
 
 import { StateStorageService } from './auth/state-storage.service';
@@ -30,9 +27,6 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     Ng2Webstorage.forRoot({ prefix: 'app', separator: '-' })
   ],
   declarations: [
-    PageNotFoundComponent,
-    AccessDeniedComponent,
-    DefaultLayoutComponent,
     NavMenuComponent
   ],
   entryComponents: [
