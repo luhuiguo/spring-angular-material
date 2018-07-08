@@ -1,10 +1,8 @@
 FROM openjdk:8-jre
 
-ADD @project.build.finalName@.war /opt/@project.artifactId@/@project.build.finalName@.war
+ARG JAR_FILE=@project.build.finalName@.war
 
-RUN mkdir /opt/@project.artifactId@/work
-
-VOLUME /opt/@project.artifactId@/work
+ADD JAR_FILE /opt/@project.artifactId@/@project.build.finalName@.war
 
 EXPOSE 8080
 

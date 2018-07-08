@@ -142,8 +142,8 @@ public class UserService {
    * @return updated user
    */
   public Optional<UserModel> updateUser(UserModel userModel) {
-    return Optional.of(userRepository
-      .findOne(userModel.getId()))
+    return userRepository
+      .findById(userModel.getId())
       .map(user -> {
         userMapper.updateEntityFromModel(userModel, user);
 

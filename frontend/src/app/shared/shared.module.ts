@@ -3,10 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { AppMaterialModule } from '../app-material/app-material.module';
-//import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { MaterialModule } from '../material/material.module';
 
 @NgModule({
   imports: [
@@ -15,10 +12,7 @@ import { AppMaterialModule } from '../app-material/app-material.module';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    // BrowserAnimationsModule,
-    FlexLayoutModule,
-    AppMaterialModule
-    //NgZorroAntdModule
+    MaterialModule
   ],
   declarations: [],
   exports: [
@@ -27,10 +21,7 @@ import { AppMaterialModule } from '../app-material/app-material.module';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    // BrowserAnimationsModule,
-    FlexLayoutModule,
-    AppMaterialModule
-    //NgZorroAntdModule
+    MaterialModule
   ]
 })
 export class SharedModule { }

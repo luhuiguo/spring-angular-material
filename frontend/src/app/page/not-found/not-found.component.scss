@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  height: 100%;
+
+  .page {
+    display: block;
+    width: 368px;
+    margin: 0 auto;
+    text-align: center;
+
+    .content {
+      margin-bottom: 32px;
+    }
+  }
+}

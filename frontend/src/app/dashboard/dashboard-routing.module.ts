@@ -1,18 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { DefaultLayoutComponent } from '../core/layout/default-layout/default-layout.component';
+import { AuthGuard } from '../core/auth/auth.guard';
+
 import { DashboardComponent } from './dashboard.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
-  },
-  {
-    path: 'dashboard',
     component: DashboardComponent,
+    canLoad: [AuthGuard],
     data: { authorities: ['ROLE_USER'] }
   }
 ];

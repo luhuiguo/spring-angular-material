@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { catchError, map, tap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { Observable, of, throwError, Subject} from 'rxjs';
+import { map } from 'rxjs/operators';
+
 
 import { User } from '../user/user';
-import { take } from 'rxjs/operators/take';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
 
   public static readonly TOKEN_KEY = 'authenticationToken';
@@ -18,7 +18,9 @@ export class AuthService {
   authenticated = false;
   authenticationState = new Subject<User>();
 
+
   constructor(
+    private injector: Injector,
     private http: HttpClient,
     private localStorage: LocalStorageService,
     private sessionStorage: SessionStorageService
@@ -44,7 +46,7 @@ export class AuthService {
       rememberMe: credentials.rememberMe
     };
 
-    return this.http.post(environment.apiUrl + 'api/authenticate', data, { observe: 'response' }).pipe(
+    return this.http.post(`api/authenticate`, data, { observe: 'response' }).pipe(
       map(resp => {
         const bearerToken = resp.headers.get('Authorization');
         if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
@@ -52,16 +54,18 @@ export class AuthService {
           this.storeAuthenticationToken(jwt, credentials.rememberMe);
           return jwt;
         }
-      }),
-      tap(
-        jwt => {
-          this.getPrincipal(true).subscribe(
-            (principal) => {
-
-            }
-          )
-        }
-      )
+      })
+      // ,
+      // tap(
+      //   jwt => {
+      //     this.getPrincipal(true).subscribe(
+      //       (principal) => {
+      //
+      //
+      //       }
+      //     );
+      //   }
+      // )
     );
   }
 
@@ -69,9 +73,9 @@ export class AuthService {
 
     if (jwt) {
       this.storeAuthenticationToken(jwt, rememberMe);
-      return Observable.of(jwt);
+      return of(jwt);
     } else {
-      return Observable.throw('jwt_required');
+      return throwError('jwt_required');
     }
   }
 
@@ -85,11 +89,11 @@ export class AuthService {
   }
 
   getAccount(): Observable<User> {
-    return this.http.get(environment.apiUrl + 'api/account');
+    return this.http.get(`api/account`);
   }
 
   updateAccount(user: User): Observable<User> {
-    return this.http.post(environment.apiUrl + 'api/account', user);
+    return this.http.post(`api/account`, user);
   }
 
   getPrincipal(force?: boolean): Observable<User> {
@@ -98,22 +102,24 @@ export class AuthService {
     }
 
     if (this.principal) {
-      return Observable.of(this.principal);
+      return of(this.principal);
     }
 
-    return this.getAccount().map(
-      (account) => {
-        if (account) {
-          this.authenticate(account)
-        } else {
-          this.authenticate(null)
+    return this.getAccount().pipe(
+      map(
+        (account) => {
+          if (account) {
+            this.authenticate(account);
+          } else {
+            this.authenticate(null);
+          }
+          return this.principal;
+        },
+        (error) => {
+          this.authenticate(null);
+          return null;
         }
-        return this.principal;
-      },
-      (error) => {
-        this.authenticate(null)
-        return null;
-      }
+      )
     );
   }
 
@@ -127,13 +133,15 @@ export class AuthService {
 
   hasAuthority(authority: string): Observable<boolean> {
     if (!this.authenticated) {
-      return Observable.of(false);
+      return of(false);
     }
-    return this.getPrincipal().map((principal) => {
-      return principal.authorities && principal.authorities.includes(authority);
-    }, () => {
-      return false;
-    });
+    return this.getPrincipal().pipe(
+      map((principal) => {
+        return principal.authorities && principal.authorities.includes(authority);
+      }, () => {
+        return false;
+      })
+    );
   }
 
   hasAnyAuthorityDirect(authorities: string[]): boolean {
@@ -151,21 +159,23 @@ export class AuthService {
 
   hasAnyAuthority(authorities: string[]): Observable<boolean> {
     if (!this.authenticated) {
-      return Observable.of(false);
+      return of(false);
     }
-    return this.getPrincipal().map((principal) => {
-      if (!principal.authorities){
-        return false;
-      }
-      for (let i = 0; i < authorities.length; i++) {
-        if (principal.authorities.includes(authorities[i])) {
-          return true;
+    return this.getPrincipal().pipe(
+      map((principal) => {
+        if (!principal.authorities) {
+          return false;
         }
-      }
-      return false;
-    }, () => {
-      return false;
-    });
+        for (let i = 0; i < authorities.length; i++) {
+          if (principal.authorities.includes(authorities[i])) {
+            return true;
+          }
+        }
+        return false;
+      }, () => {
+        return false;
+      })
+    );
   }
 
   isPrincipalResolved(): boolean {
@@ -186,3 +196,4 @@ export class AuthService {
     return this.authenticationState.asObservable();
   }
 }
+

@@ -1,22 +1,19 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { NgModule } from '@angular/core';
 
-import './rxjs-operators';
-
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 /* Feature Modules */
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
-import { LayoutModule } from './layout/layout.module';
+import { NavModule } from './nav/nav.module';
 import { PageModule } from './page/page.module';
 import { LoginModule } from './login/login.module';
 
 /* Routing Module */
 import { AppRoutingModule } from './app-routing.module';
-
+import { HasAnyAuthorityDirective } from './core/auth/has-any-authority.directive';
 
 @NgModule({
   declarations: [
@@ -27,10 +24,11 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserAnimationsModule,
     CoreModule,
     SharedModule,
-    LayoutModule,
+    NavModule,
+    PageModule,
     LoginModule,
-    AppRoutingModule,
-    PageModule
+
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

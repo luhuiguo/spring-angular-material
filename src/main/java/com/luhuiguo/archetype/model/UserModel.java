@@ -17,7 +17,6 @@ public class UserModel {
 
   private Long id;
 
-  @NotBlank
   @Pattern(regexp = Constants.USERNAME_REGEX)
   @Size(min = 1, max = 50)
   private String username;

@@ -3,7 +3,6 @@ package com.luhuiguo.archetype.service;
 import com.luhuiguo.archetype.domain.PersistentAuditEvent;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +40,7 @@ public class AuditEventConverter {
     if (persistentAuditEvent == null) {
       return null;
     }
-    return new AuditEvent(Date.from(persistentAuditEvent.getEventDate()), persistentAuditEvent.getPrincipal(),
+    return new AuditEvent(persistentAuditEvent.getEventDate(), persistentAuditEvent.getPrincipal(),
       persistentAuditEvent.getEventType(), convertDataToObjects(persistentAuditEvent.getData()));
   }
 

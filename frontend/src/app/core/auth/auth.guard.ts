@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Router, Route, CanActivate, CanActivateChild, CanLoad, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { AuthService } from './auth.service';
 import { StateStorageService } from './state-storage.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
   constructor(private router: Router,
-    private authService: AuthService,
-    private stateStorageService: StateStorageService) {
+              private authService: AuthService,
+              private stateStorageService: StateStorageService) {
   }
 
   canActivate(
@@ -27,7 +29,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
   canLoad(route: Route): Observable<boolean> | Promise<boolean> | boolean {
     const authorities = route.data['authorities'];
-    let url = `/${route.path}`;
+    const url = `/${route.path}`;
     return this.checkAuth(authorities, url);
   }
 
@@ -39,18 +41,19 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
           return true;
         }
         if (account) {
-          let authed: boolean = authService.hasAnyAuthorityDirect(authorities);
+          const authed: boolean = authService.hasAnyAuthorityDirect(authorities);
           if (!authed) {
-            this.router.navigate(['access-denied']);
+            this.router.navigate(['forbidden']);
           }
           return authed;
         }
       }
     ).catch(
       (err) => {
-        this.router.navigate(['login'])
+        this.router.navigate(['login']);
         return false;
       }
     );
   }
 }
+

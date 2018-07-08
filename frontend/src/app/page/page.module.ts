@@ -1,21 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../shared/shared.module';
-
-import { PageRoutingModule } from './page-routing.module';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { AccessDeniedComponent } from './access-denied/access-denied.component';
-
+import { ErrorComponent } from './error/error.component';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   imports: [
-    CommonModule,
-    SharedModule,
-    PageRoutingModule
+    CommonModule
   ],
-  declarations: [
-    PageNotFoundComponent,
-    AccessDeniedComponent
-  ]
+  declarations: [ErrorComponent, ForbiddenComponent, NotFoundComponent]
 })
 export class PageModule { }

@@ -3,6 +3,7 @@ package com.luhuiguo.archetype.repository;
 import com.luhuiguo.archetype.config.Constants;
 import com.luhuiguo.archetype.domain.PersistentAuditEvent;
 import com.luhuiguo.archetype.service.AuditEventConverter;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -41,32 +42,12 @@ public class CustomAuditEventRepository implements AuditEventRepository {
   }
 
   @Override
-  public List<AuditEvent> find(Date after) {
+  public List<AuditEvent> find(String principal, Instant after, String type) {
     Iterable<PersistentAuditEvent> persistentAuditEvents =
-      persistenceAuditEventRepository.findByEventDateAfter(after.toInstant());
+      persistenceAuditEventRepository.findByPrincipalAndEventDateAfterAndEventType(principal, after, type);
     return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
   }
 
-  @Override
-  public List<AuditEvent> find(String principal, Date after) {
-    Iterable<PersistentAuditEvent> persistentAuditEvents;
-    if (principal == null && after == null) {
-      persistentAuditEvents = persistenceAuditEventRepository.findAll();
-    } else if (after == null) {
-      persistentAuditEvents = persistenceAuditEventRepository.findByPrincipal(principal);
-    } else {
-      persistentAuditEvents =
-        persistenceAuditEventRepository.findByPrincipalAndEventDateAfter(principal, after.toInstant());
-    }
-    return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
-  }
-
-  @Override
-  public List<AuditEvent> find(String principal, Date after, String type) {
-    Iterable<PersistentAuditEvent> persistentAuditEvents =
-      persistenceAuditEventRepository.findByPrincipalAndEventDateAfterAndEventType(principal, after.toInstant(), type);
-    return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
-  }
 
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -77,7 +58,7 @@ public class CustomAuditEventRepository implements AuditEventRepository {
       PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
       persistentAuditEvent.setPrincipal(event.getPrincipal());
       persistentAuditEvent.setEventType(event.getType());
-      persistentAuditEvent.setEventDate(event.getTimestamp().toInstant());
+      persistentAuditEvent.setEventDate(event.getTimestamp());
       Map<String, String> eventData = auditEventConverter.convertDataToStrings(event.getData());
       persistentAuditEvent.setData(truncate(eventData));
       persistenceAuditEventRepository.save(persistentAuditEvent);
