@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { mergeMap, catchError } from 'rxjs/operators';
+import {mergeMap, catchError, tap} from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 
@@ -31,18 +31,17 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     return next.handle(authReq).pipe(
-      mergeMap((event: any) => {
-        if (event instanceof HttpResponse) {
 
+      tap(
+        (event: HttpEvent<any>) => {},
+        (err: any) => {
+          if (err instanceof HttpErrorResponse) {
+            if (err.status === 401) {
+              this.authService.logout().subscribe();
+            }
+          }
         }
-        return of(event);
-      }),
-      catchError((err: HttpErrorResponse) => {
-        if (err.status === 401) {
-          this.authService.logout().subscribe();
-        }
-        return of(event);
-      })
+      )
     );
   }
 }

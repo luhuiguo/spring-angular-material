@@ -1,0 +1,19 @@
+@import 'src/theme.scss';
+
+:host {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  background-color: mat-color($app-primary);
+}
+
+
+mat-card {
+  display: block;
+  width: 368px;
+  margin: 0 auto;
+}
+
+.full-width-input {
+  width: 100%;
+}

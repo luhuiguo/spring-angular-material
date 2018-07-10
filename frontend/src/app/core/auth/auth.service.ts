@@ -2,7 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { Observable, of, throwError, Subject} from 'rxjs';
-import { map } from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 
 
 import { User } from '../user/user';
@@ -108,6 +108,7 @@ export class AuthService {
     return this.getAccount().pipe(
       map(
         (account) => {
+          console.log(account);
           if (account) {
             this.authenticate(account);
           } else {
@@ -116,6 +117,7 @@ export class AuthService {
           return this.principal;
         },
         (error) => {
+          console.log(error);
           this.authenticate(null);
           return null;
         }

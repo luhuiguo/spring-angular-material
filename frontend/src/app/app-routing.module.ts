@@ -1,12 +1,13 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
 import { AuthGuard } from './core/auth/auth.guard';
 
-import { NavComponent } from './nav/nav.component';
-import { ForbiddenComponent } from "./page/forbidden/forbidden.component";
-import { NotFoundComponent } from "./page/not-found/not-found.component";
-import { ErrorComponent } from "./page/error/error.component";
+import {NavComponent} from './nav/nav.component';
+import {ForbiddenComponent} from './page/forbidden/forbidden.component';
+import {NotFoundComponent} from './page/not-found/not-found.component';
+import {ErrorComponent} from './page/error/error.component';
+import {LoginComponent} from './login/login.component';
 
 export const routes: Routes = [
 
@@ -15,52 +16,52 @@ export const routes: Routes = [
     redirectTo: '/dashboard',
     pathMatch: 'full'
   },
-  // {
-  //   path: "login",
-  //   component: LoginComponent
-  // },
   {
-    path: "forbidden",
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'forbidden',
     component: ForbiddenComponent
   },
   {
-    path: "error",
+    path: 'error',
     component: ErrorComponent
   },
   {
-    path: "",
+    path: '',
     component: NavComponent,
-    //canActivateChild: [AuthGuard],
+    canActivateChild: [AuthGuard],
     children: [
       {
-        path: "dashboard",
-        loadChildren: "./dashboard/dashboard.module#DashboardModule",
-        //canLoad: [AuthGuard],
+        path: 'dashboard',
+        loadChildren: './dashboard/dashboard.module#DashboardModule',
+        canLoad: [AuthGuard],
         data: {
           preload: true,
-          authorities: ["ROLE_USER"]
+          authorities: ['ROLE_USER']
         }
       },
-  //     {
-  //       path: 'users',
-  //       loadChildren: 'app/user/user.module#UserModule',
-  //       canLoad: [AuthGuard],
-  //       data: {
-  //         authorities: ['ROLE_ADMIN']
-  //       }
-  //     },
-  //     {
-  //       path: "test",
-  //       loadChildren: "app/test/test.module#TestModule",
-  //       canLoad: [AuthGuard],
-  //       data: {
-  //         authorities: ["ROLE_USER"]
-  //       }
-  //     }
+      //     {
+      //       path: 'users',
+      //       loadChildren: 'app/user/user.module#UserModule',
+      //       canLoad: [AuthGuard],
+      //       data: {
+      //         authorities: ['ROLE_ADMIN']
+      //       }
+      //     },
+      //     {
+      //       path: 'test',
+      //       loadChildren: 'app/test/test.module#TestModule',
+      //       canLoad: [AuthGuard],
+      //       data: {
+      //         authorities: ['ROLE_USER']
+      //       }
+      //     }
     ]
   },
   {
-    path: "**",
+    path: '**',
     component: NotFoundComponent
   }
 
@@ -77,4 +78,5 @@ export const routes: Routes = [
     RouterModule
   ]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
